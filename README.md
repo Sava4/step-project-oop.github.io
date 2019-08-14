@@ -12,11 +12,16 @@ git clone https://github.com/Sava4/step-project-oop.github.io.git
 ```sh
 npm install
 ```
-3. Start the development server
+3. Build the assets once
+```sh
+npm run deploy
+```
+4. Start the development server
 ```sh
 npm start
 ```
 4. Modify files and see results with live reload
+Deafault address: http://localhost:3000
 
 ## What's included
 
@@ -26,7 +31,7 @@ The `npm` dependencies included in `package.json` are:
 * <code>[node-sass](https://github.com/sass/node-sass)</code> to compile your own Sass file
 * <code>[postcss-cli](https://github.com/postcss/postcss-cli)</code> and <code>[autoprefixer](https://github.com/postcss/autoprefixer)</code> to add support for older browsers
 * <code>[babel-cli](https://babeljs.io/docs/usage/cli/)</code>, <code>[babel-preset-env](https://github.com/babel/babel-preset-env)</code> and <code>[babel-preset-es2015-ie](https://github.com/jmcriffey/babel-preset-es2015-ie)</code> for compiling ES6 JavaScript files
-* <code>[copy](https://www.npmjs.com/package/copy)</code>,
+* <code>[copyfiles](https://www.npmjs.com/package/copyfiles)</code>,
 * <code>[watch](https://www.npmjs.com/package/copy)</code>.
 
 ## Other included npm scripts 
