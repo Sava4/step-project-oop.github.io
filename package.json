@@ -37,7 +37,7 @@
     "html-build": "copyfiles -f src/html/index.html dist/",
     "js-build": "babel src/js --out-dir dist",
     "js-watch": "npm run js-build -- --watch",
-    "html-watch": "chokidar 'src/html/index.html' -c 'npm run html-build'",
+    "html-watch": "chokidar \"src/html/index.html\" -c \"npm run html-build\"",
     "browser": "cd dist && browser-sync start --server --files index.html main.css main.js",
     "start": "npm-run-all --parallel html-watch css-watch js-watch browser"
   }

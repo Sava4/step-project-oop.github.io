@@ -32,7 +32,7 @@ The `npm` dependencies included in `package.json` are:
 * <code>[postcss-cli](https://github.com/postcss/postcss-cli)</code> and <code>[autoprefixer](https://github.com/postcss/autoprefixer)</code> to add support for older browsers
 * <code>[babel-cli](https://babeljs.io/docs/usage/cli/)</code>, <code>[babel-preset-env](https://github.com/babel/babel-preset-env)</code> and <code>[babel-preset-es2015-ie](https://github.com/jmcriffey/babel-preset-es2015-ie)</code> for compiling ES6 JavaScript files
 * <code>[copyfiles](https://www.npmjs.com/package/copyfiles)</code>,
-* <code>[watch](https://www.npmjs.com/package/copy)</code>.
+* <code>[chokidar-cli](https://github.com/kimmobrunfeldt/chokidar-cli)</code>.
 
 ## Other included npm scripts 
 
