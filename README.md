@@ -12,9 +12,9 @@ git clone https://github.com/Sava4/step-project-oop.github.io.git
 ```sh
 npm install
 ```
-3. Build the assets once
+3. Build all the assets once
 ```sh
-npm run deploy
+npm run build
 ```
 4. Start the development server
 ```sh
