@@ -29,3 +29,27 @@ $primary-invert: $pink-invert;
 @import "../../node_modules/bulma/bulma";
 @import "fa/fontawesome.scss";
 @import "fa/solid.scss";
+
+
+.header {
+    padding: 1.5rem;
+    margin-bottom: 4rem;
+}
+
+.logo {
+    width: 100px;
+    height: 100px;
+}
+
+.dashboard {
+    height: 70vh;
+    text-align: center;
+}
+
+.dashboard:empty::after {
+    content: 'No items have been added';
+    font-size: 3rem;
+    font-weight: bold;
+    position: relative;
+    top: 35vh;
+}
