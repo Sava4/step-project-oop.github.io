@@ -39,7 +39,7 @@ The `npm` dependencies included in `package.json` are:
 ```sh
 Lifecycle scripts included in oop-step-project:
   start
-    npm-run-all --parallel html-watch css-watch js-watch browser
+    npm-run-all --parallel css-watch js-watch html-watch browser
 
 available via `npm run-script`:
   css-deploy
@@ -50,18 +50,24 @@ available via `npm run-script`:
     postcss --use autoprefixer --output dist/main.css dist/main.css
   css-watch
     npm run css-build -- --watch
-  deploy
-    npm run css-deploy && npm run js-build && npm run html-build
+  build
+    npm-run-all --parallel css-deploy js-build html-build assets
   gh-pages
-    npm run deploy && cd dist && git add . && git commit -am 'deploy' && git push origin gh-pages
+    npm run build && cd dist && git add . && git commit -am 'deploy' && git push origin gh-pages
+  assets
+    npm-run-all --parallel fonts images
+  images
+    copyfiles -f src/assets/img/* dist/
+  fonts
+    copyfiles -f src/assets/webfonts/* dist/webfonts
   html-build
-    cd src/html && copy index.html ../../dist/
+    copyfiles -f src/html/index.html dist/
   js-build
     babel src/js --out-dir dist
   js-watch
     npm run js-build -- --watch
   html-watch
-    watch 'npm run html-build' src/html
+    chokidar "src/html/index.html" -c "npm run html-build"
   browser
     cd dist && browser-sync start --server --files index.html main.css main.js
 ```
