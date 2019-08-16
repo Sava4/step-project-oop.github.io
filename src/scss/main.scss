@@ -32,8 +32,9 @@ $primary-invert: $pink-invert;
 
 
 .header {
+    margin-top: 0.5rem;
     padding: 1.5rem;
-    margin-bottom: 4rem;
+    border-radius: 10px;
 }
 
 .logo {
@@ -42,6 +43,7 @@ $primary-invert: $pink-invert;
 }
 
 .dashboard {
+    border-radius: 10px;
     height: 70vh;
     text-align: center;
 }
@@ -53,3 +55,5 @@ $primary-invert: $pink-invert;
     position: relative;
     top: 35vh;
 }
+
+//make normal content with js.
