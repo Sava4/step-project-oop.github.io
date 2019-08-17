@@ -55,5 +55,19 @@ $primary-invert: $pink-invert;
     position: relative;
     top: 35vh;
 }
+.card-size {
+    max-width: 20%;
+    min-width: 170px;
+    border-radius: 6px;
+}
+.card-header {
+    background-color: whitesmoke;
+    border-top-right-radius: 6px;
+    border-top-left-radius: 6px;
+}
+.pacient-name {
+    font-weight: bold;
+}
+
 
 //make normal content with js.

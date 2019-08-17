@@ -23,7 +23,24 @@
     </header>
 <!-- button not with a but with button type button -->
     <section class="section">
-      <div class="container dashboard has-background-grey-light radius"></div>
+      <div class="container dashboard has-background-grey-light radius">
+        <div class="card card-size">
+          <header class="card-header">
+            <p class="card-header-title">Visit details</p>
+            <span class="card-header-icon">
+              <button class="delete" aria-label="close"></button>
+            </span>
+          </header>
+          <div class="card-content">
+            <div class="content">
+              <span class="pacient-name"> Ihor Dzhemesiuk </span>
+              <span class="doctor-visitname"> Cardiologist</span>
+              <a href="#" class="card-header-icon" aria-label="more options">
+                Show more...</a>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
         <div class="modal" id="card-modal">
@@ -40,13 +57,13 @@
                     <input class="input" type="text" placeholder="Input">
                   </div>
                 </div>
-            
+
                 <div class="field">
                   <div class="control">
                     <input class="input" type="date">
                   </div>
                 </div>
-            
+
                 <div class="field">
                   <p class="control">
                     <span class="select">
@@ -56,12 +73,12 @@
                     </span>
                   </p>
                 </div>
-            
+
                 <div class="buttons">
                   <a class="button is-primary">Primary</a>
                   <a class="button is-link">Link</a>
                 </div>
-            
+
           </section>
           <footer class="modal-card-foot">
             <button class="button is-success">Save changes</button>
