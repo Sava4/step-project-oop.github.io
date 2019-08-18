@@ -13,14 +13,19 @@ const doctorselect = document.getElementById('doctor-select');
 const save = document.getElementById('save');
 const dashboard = document.getElementById('dashboard')
 
-
+const removeFields = () => {
+  let fields = Array.from(document.getElementsByClassName('field generated'));
+if (fields.length !== 0) {
+  fields.forEach(el => el.remove());
+  }
+}
 
 const closeModal = () => {
   modal.classList.remove('is-active');
   html.classList.remove('is-clipped');
   form.reset();
+  removeFields();
 }
-
 
 create.addEventListener('click', () => {
   modal.classList.add('is-active');
@@ -43,11 +48,9 @@ doctorselect.addEventListener('change', (e) => {
   let {target: {value: doctor}} = e;
 
   const obj = dropdownFields.find(el => doctor === el.name);
-
-  let removeFields = Array.from(document.getElementsByClassName('field generated'));
-  if (removeFields.length !== 0) {
-    removeFields.forEach(el => el.remove());
-  }
+  
+  removeFields(); 
+  
   for (let prop in obj) {
     if (obj[prop] === 'field') {
       let field = document.createElement('div');
