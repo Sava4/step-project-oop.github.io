@@ -25,10 +25,20 @@ var doctorselect = document.getElementById('doctor-select');
 var save = document.getElementById('save');
 var dashboard = document.getElementById('dashboard');
 
+var removeFields = function removeFields() {
+  var fields = Array.from(document.getElementsByClassName('field generated'));
+  if (fields.length !== 0) {
+    fields.forEach(function (el) {
+      return el.remove();
+    });
+  }
+};
+
 var closeModal = function closeModal() {
   modal.classList.remove('is-active');
   html.classList.remove('is-clipped');
   form.reset();
+  removeFields();
 };
 
 create.addEventListener('click', function () {
@@ -56,12 +66,8 @@ doctorselect.addEventListener('change', function (e) {
     return doctor === el.name;
   });
 
-  var removeFields = Array.from(document.getElementsByClassName('field generated'));
-  if (removeFields.length !== 0) {
-    removeFields.forEach(function (el) {
-      return el.remove();
-    });
-  }
+  removeFields();
+
   for (var prop in obj) {
     if (obj[prop] === 'field') {
       var field = document.createElement('div');
