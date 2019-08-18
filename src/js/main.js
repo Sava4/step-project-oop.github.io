@@ -121,10 +121,7 @@ class Visit {
         <a href="#" class="card-header-icon" aria-label="more options">
           Show more...</a>
       </div>`
-    // this.btn = this.element.getElementsByClassName('delete');
     this.element.onclick = this.onClick.bind(this);
-    // this.btn.onclick = this.onClick.bind(this);
-
     this.element.style.cursor = 'pointer';
   }
   
