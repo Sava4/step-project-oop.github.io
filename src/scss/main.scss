@@ -45,6 +45,7 @@ $primary-invert: $pink-invert;
 .dashboard {
     border-radius: 10px;
     height: 65vh;
+    padding: 1.5rem;
     text-align: center;
 }
 
@@ -53,12 +54,14 @@ $primary-invert: $pink-invert;
     font-size: 3rem;
     font-weight: bold;
     position: relative;
-    top: 32vh;
+    top: 30vh;
 }
 .card-size {
     max-width: 20%;
     min-width: 170px;
     border-radius: 6px;
+    display: inline-block;
+    margin: 10px;
 }
 .card-header {
     background-color: whitesmoke;
