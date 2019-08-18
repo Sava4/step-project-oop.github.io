@@ -40,7 +40,7 @@
     "html-build": "copyfiles -f src/html/index.html dist/",
     "js-build": "babel src/js --out-dir dist --source-maps",
     "js-watch": "npm run js-build -- --watch",
-    "html-watch": "chokidar \"src/html/index.html\" -c \"npm run html-build\"",
+    "html-watch": "npm run html-build && chokidar \"src/html/index.html\" -c \"npm run html-build\"",
     "browser": "cd dist && browser-sync start --server --files index.html main.css main.js",
     "start": "npm-run-all --parallel css-watch js-watch html-watch browser"
   }

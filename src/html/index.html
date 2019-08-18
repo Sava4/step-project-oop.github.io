@@ -21,10 +21,10 @@
         </div>
       </div>
     </header>
-<!-- button not with a but with button type button -->
+
     <section class="section">
-      <div class="container dashboard has-background-grey-light radius">
-        <div class="card card-size">
+      <div class="container dashboard has-background-grey-light radius" id="dashboard">
+        <!-- <div class="card card-size">
           <header class="card-header">
             <p class="card-header-title">Visit details</p>
             <span class="card-header-icon">
@@ -39,7 +39,7 @@
                 Show more...</a>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </section>
 
@@ -47,46 +47,62 @@
         <div class="modal-background"></div>
         <div class="modal-card">
           <header class="modal-card-head">
-            <p class="modal-card-title">Modal title</p>
+            <p class="modal-card-title">Create Doctor Visit</p>
             <button class="delete" aria-label="close"></button>
           </header>
           <section class="modal-card-body">
-                        <!-- Content ... -->
-              <div class="field">
-                  <div class="control">
-                    <input class="input" type="text" placeholder="Input">
+
+              <form action="" id="modal-form">
+                <div class="field" id="first-field">
+                    <label class="label">Choose Doctor</label>
+                    <div class="control">
+                      <div class="select">
+                        <select id="doctor-select" name="visitname" required>
+                          <option value="">Choose Doctor</option>
+                          <option>Cardiologist</option>
+                          <option>Dentist</option>
+                          <option>Therapist</option>
+                        </select>
+                      </div>
                   </div>
                 </div>
+                
+                <div class="field">
+                    <label class="label">Full Name</label>
+                    <div class="control">
+                        <input class="input" type="text" name="fullname" placeholder="John Smith" required>
+                    </div>
+                  </div>
+
+                  <div class="field">
+                      <label class="label">Date of Visit</label>
+                      <div class="control">
+                          <input class="input" type="date" name="date" required>
+                      </div>
+                    </div> 
 
                 <div class="field">
+                  <label class="label">Purpose</label>
                   <div class="control">
-                    <input class="input" type="date">
+                      <input class="input" type="text" name="purpose" placeholder="Enter the purpose of visit" required>
                   </div>
                 </div>
-
+  
                 <div class="field">
-                  <p class="control">
-                    <span class="select">
-                      <select>
-                        <option>Select dropdown</option>
-                      </select>
-                    </span>
-                  </p>
-                </div>
-
-                <div class="buttons">
-                  <a class="button is-primary">Primary</a>
-                  <a class="button is-link">Link</a>
-                </div>
-
+                    <label class="label">Comment</label>
+                    <div class="control">
+                        <textarea class="textarea" name="comment" placeholder="Comment about the visit" maxlength="400"></textarea>
+                    </div>
+                  </div>
+              </form>
+            
           </section>
           <footer class="modal-card-foot">
-            <button class="button is-success">Save changes</button>
-            <button class="button">Cancel</button>
+            <button class="button is-success" type="button" formenctype="text/plain" form="modal-form" id="save">Save Visit</button>
+            <button class="button cancel">Cancel</button>
           </footer>
         </div>
       </div>
-
 
   </body>
 </html>
