@@ -23,7 +23,7 @@
     </header>
 
     <section class="section">
-      <div class="container dashboard has-background-grey-light radius" id="dashboard"><!-- <div class="card card-size">
+      <div class="container dashboard has-background-grey-light radius" id="dashboard"><div class="card card-size">
           <header class="card-header">
             <p class="card-header-title">Visit details</p>
             <span class="card-header-icon">
@@ -32,16 +32,43 @@
           </header>
           <div class="card-content">
             <div class="content">
-              <span class="pacient-name"> Ihor Dzhemesiuk </span>
-              <span class="doctor-visitname"> Cardiologist</span>
-              <a href="#" class="card-header-icon" aria-label="more options">
+              <span class="pacient-name">Ihor Dzhemesiuk </span>
+              <span class="doctor-visitname">Cardiologist</span>
+              <a href="#" class="card-header-icon show-more-link" aria-label="more options">
                 Show more...</a>
             </div>
           </div>
-        </div> --></div>
+        </div>
+        <div class="card card-size">
+          <header class="card-header">
+            <p class="card-header-title">Visit details</p>
+            <span class="card-header-icon">
+              <button class="delete" aria-label="close"></button>
+            </span>
+          </header>
+          <div class="card-content">
+            <div class="content">
+              <span class="pacient-name">Ihor Dzhemesiuk </span>
+              <span class="doctor-visitname">Cardiologist</span>
+              <div class="additional-fields">
+                <span class="doctor-field">Heart Pressure: 160/80</span>
+                <span class="doctor-field">BMI Index: 1.28</span>
+                <span class="doctor-field">Heart Diseases: Listofdiseases, separated by commas</span>
+                <span class="doctor-field">Age: 35</span>
+                <span class="doctor-field">Date of Visit: 03.05.19</span>
+                <span class="doctor-field">Purpose: Text of purpose</span>
+                <span class="doctor-field">Comment: Comment text that describes the visit</span>
+              </div>
+              <a href="#" class="card-header-icon show-more-link" aria-label="more options">
+                Show Less...</a>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
-        <div class="modal" id="card-modal">
+    <!-- delete is-active, and default date -->
+        <div class="modal is-active" id="card-modal">
         <div class="modal-background"></div>
         <div class="modal-card">
           <header class="modal-card-head">
@@ -75,7 +102,7 @@
                   <div class="field">
                       <label class="label">Date of Visit</label>
                       <div class="control">
-                          <input class="input" type="date" name="date" required>
+                          <input class="input" type="date" name="date" required value="2018-07-22">
                       </div>
                     </div> 
 
@@ -89,7 +116,7 @@
                 <div class="field">
                     <label class="label">Comment</label>
                     <div class="control">
-                        <textarea class="textarea" name="comment" placeholder="Comment about the visit" maxlength="400"></textarea>
+                        <textarea class="textarea" name="commentary" placeholder="Comment about the visit" maxlength="400"></textarea>
                     </div>
                   </div>
               </form>

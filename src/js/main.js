@@ -1,8 +1,3 @@
-// document.addEventListener('DOMContentLoaded', () => {
-//   console.log('Hello Bulma!');
-// });
-
-
 const html = document.getElementsByTagName('html')[0];
 const create = document.getElementById('create-btn');
 const modal = document.getElementById('card-modal');
@@ -23,6 +18,7 @@ if (fields.length !== 0) {
 const closeModal = () => {
   modal.classList.remove('is-active');
   html.classList.remove('is-clipped');
+  Array.from(form.elements).forEach(el => el.classList.remove('is-danger'));
   form.reset();
   removeFields();
 }
@@ -34,61 +30,53 @@ create.addEventListener('click', () => {
 
 modalCloses.forEach(el => el.addEventListener('click', closeModal));
 
-const dropdownFields = [{'name': 'Cardiologist',
-                         'heartpressure': 'field',
-                         'bmiindex': 'field',
-                         'heartdiseases': 'field',
-                         'age': 'field'}, 
-                         {'name':'Dentist',
-                          'lastvisit': 'date'},
-                         {'name': 'Therapist',
-                          'age': 'field'}]
-
 doctorselect.addEventListener('change', (e) => {
   let {target: {value: doctor}} = e;
 
-  const obj = dropdownFields.find(el => doctor === el.name);
-  
+  const doctorFields = Visit.dropdownFields().find(el => doctor === el.name).fields;
   removeFields(); 
   
-  for (let prop in obj) {
-    if (obj[prop] === 'field') {
-      let field = document.createElement('div');
-      field.classList.add('field', 'generated');
-      field.innerHTML = `<label class="label">${prop}</label>
-      <div class="control">
-        <input class="input" name="${prop}" type="text" required>
-      </div>`
+  doctorFields.forEach(el => {
+    let field = document.createElement('div');
+    field.classList.add('field', 'generated');
+
+    if (el.type === 'field') {
+    field.innerHTML = `<label class="label">${el.title}</label>
+                        <div class="control">
+                          <input class="input" name="${el.id}" type="text" placeholder="${el.placeholder}" required>
+                        </div>`
 
       injectfield.after(field);
-
-    } else if (obj[prop] === 'date') {
-      let field = document.createElement('div');
-      field.classList.add('field', 'generated');
-      field.innerHTML = `<label class="label">${prop}</label>
-      <div class="control">
-        <input class="input" name="${prop}" type="date" required>
-      </div>`
+    } else if (el.type === 'date') {
+      field.innerHTML = `<label class="label">${el.title}</label>
+                          <div class="control">
+                            <input class="input" name="${el.id}" type="date" required>
+                          </div>`
       injectfield.after(field);
     }
-  }
+  })
 
 });
 
 const newCard = (fd) => {
   let card;
   if (fd.visitname === 'Cardiologist') {
-    card = new CardioVisit(fd.visitname, fd.date, fd.fullname, fd.purpose, fd.commentary = "", fd.pressure, fd.bmiindex, fd.heartdiseases, fd.age);
+    card = new CardioVisit(fd.visitname, fd.date, fd.fullname, fd.purpose, fd.commentary, fd.pressure, fd.bmiindex, fd.heartdiseases, fd.age);
+    card.renderCardioCard();
   } else if (fd.visitname === 'Dentist') {
-    card = new DentistVisit(fd.visitname, fd.date, fd.fullname, fd.purpose, fd.commentary = "", fd.lastvisit);
+    card = new DentistVisit(fd.visitname, fd.date, fd.fullname, fd.purpose, fd.commentary, fd.lastvisit);
+    card.addDentistFields();
   } else if (fd.visitname === 'Therapist') {
-    card = new TherapistVisit(fd.visitname, fd.date, fd.fullname, fd.purpose, fd.commentary = "", fd.age);
+    card = new TherapistVisit(fd.visitname, fd.date, fd.fullname, fd.purpose, fd.commentary, fd.age);
+    card.addTherapistFields();
   }
   card.draw();
 }
 
 
 save.addEventListener('click', () => {
+  Array.from(form.elements).forEach (el => el.addEventListener('invalid', (e) => e.target.classList.add('is-danger')));
+
   if (form.reportValidity()) {
     let formIter = new FormData(form);
     let formData = {}
@@ -121,16 +109,54 @@ class Visit {
       <div class="content">
         <span class="pacient-name">${this.fullname}</span>
         <span class="doctor-visitname">${this.visitname}</span>
-        <a href="#" class="card-header-icon" aria-label="more options">
+        <a href="#" class="card-header-icon show-more-link" aria-label="more options">
           Show more...</a>
       </div>`
-    this.element.onclick = this.onClick.bind(this);
-    this.element.style.cursor = 'pointer';
+      this.element.onclick = this.onClick.bind(this);
+      this.element.style.cursor = 'pointer';
   }
-  
+
+  static dropdownFields() {
+    return [{'name': 'Cardiologist',
+            'fields': [{'id': 'heartpressure',
+                        'title': 'Heart Pressure',
+                        'placeholder': '120/80',
+                        'type': 'field'},
+                        {'id': 'bmiindex',
+                        'placeholder': '1.28',
+                        'title': 'Your BMI Index',
+                        'type': 'field'},
+                        {'id': 'heartdiseases',
+                        'placeholder': 'Names of diseases',
+                        'title': 'Heart Diseases',
+                        'type': 'field'},
+                        {'id': 'age',
+                        'placeholder': '18',
+                        'title': 'Age',
+                        'type': 'field'}
+                      ]},
+            {'name':'Dentist',
+            'fields': [{'id': 'lastvisit',
+                        'title': 'Date of Last Visit',
+                        'type': 'date'}]},
+            {'name': 'Therapist',
+            'fields': [{'id': 'age',
+                        'placeholder': '18',
+                        'title': 'Age',
+                        'type': 'field'}]}
+            ]
+  }
+
+
+
+   
   onClick(e) {
     if (e.target.classList.contains('delete')) {
       this.element.remove();
+      } else if (e.target.classList.contains('show-more-link')) {
+        e.preventDefault();
+        e.target.innerText === 'Show more...' ? e.target.innerText = 'Show less...' : e.target.innerText = 'Show more...'
+        e.target.previousSibling.classList.toggle('is-hidden');
       }
     }
 
@@ -148,6 +174,26 @@ class CardioVisit extends Visit {
     this.heartdiseases = heartdiseases;
     this.age = age;
   }
+
+  addCardioFields() {
+    const fieldContainer = document.createElement('div');
+    fieldContainer.classList.add = ('additional-fields'); //is hidden add to class
+    fieldContainer.innerHTML = `
+                <span class="doctor-field">Heart Pressure: ${this.pressure}</span>
+                <span class="doctor-field">BMI Index: ${this.bmiindex}</span>
+                <span class="doctor-field">Heart Diseases: ${this.heartdiseases}</span>
+                <span class="doctor-field">Age: ${this.age}</span>
+                <span class="doctor-field">Date of Visit: ${this.date}</span>
+                <span class="doctor-field">Purpose: ${this.purpose}</span>
+                <span class="doctor-field">Comment: ${this.commentary}</span>
+    `
+    const basicCard = super.createCardEl();
+    console.log('basic', basicCard);
+    const showMore = basicCard.querySelector('.card-content > .content > .show-more-link');
+    console.log('show-more', showMore);
+    showMore.before(fieldContainer);
+    console.log(fieldContainer);
+  }
 }
 
 class DentistVisit extends Visit {
@@ -163,6 +209,19 @@ class TherapistVisit extends Visit {
     super(visitname, date, fullname, purpose, commentary);
     this.visitname = 'Therapist'
     this.age = age;
+  }
+
+  addTherapistFields() {
+    const fieldContainer = document.createElement('div');
+    fieldContainer.classList.add('additional-fields', 'is-hidden');
+    fieldContainer.innerHTML = `
+                <span class="doctor-field">Age: ${this.age}</span>
+                <span class="doctor-field">Date of Visit: ${this.date}</span>
+                <span class="doctor-field">Comment: ${this.commentary}</span>
+    `
+    const basicCard = this.element;
+    const showMore = basicCard.querySelector('.card-content > .content > .show-more-link');
+    showMore.before(fieldContainer);
   }
 }
 

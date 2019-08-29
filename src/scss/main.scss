@@ -59,15 +59,21 @@ $primary-invert: $pink-invert;
 }
 .card-size {
     max-width: 20%;
-    min-width: 170px;
+    min-width: 250px;
     border-radius: 6px;
     display: inline-block;
     margin: 10px;
+    vertical-align: top;
 }
 .card-header {
     background-color: whitesmoke;
     border-top-right-radius: 6px;
     border-top-left-radius: 6px;
+}
+
+.additional-fields {
+    display: flex;
+    flex-flow: column nowrap;
 }
 .pacient-name {
     font-weight: bold;
