@@ -62,7 +62,7 @@ const newCard = (fd) => {
   let card;
   if (fd.visitname === 'Cardiologist') {
     card = new CardioVisit(fd.visitname, fd.date, fd.fullname, fd.purpose, fd.commentary, fd.pressure, fd.bmiindex, fd.heartdiseases, fd.age);
-    card.renderCardioCard();
+    card.addCardioFields();
   } else if (fd.visitname === 'Dentist') {
     card = new DentistVisit(fd.visitname, fd.date, fd.fullname, fd.purpose, fd.commentary, fd.lastvisit);
     card.addDentistFields();
@@ -177,22 +177,18 @@ class CardioVisit extends Visit {
 
   addCardioFields() {
     const fieldContainer = document.createElement('div');
-    fieldContainer.classList.add = ('additional-fields'); //is hidden add to class
+    fieldContainer.classList.add('additional-fields', 'is-hidden');
     fieldContainer.innerHTML = `
-                <span class="doctor-field">Heart Pressure: ${this.pressure}</span>
-                <span class="doctor-field">BMI Index: ${this.bmiindex}</span>
-                <span class="doctor-field">Heart Diseases: ${this.heartdiseases}</span>
-                <span class="doctor-field">Age: ${this.age}</span>
-                <span class="doctor-field">Date of Visit: ${this.date}</span>
-                <span class="doctor-field">Purpose: ${this.purpose}</span>
-                <span class="doctor-field">Comment: ${this.commentary}</span>
-    `
-    const basicCard = super.createCardEl();
-    console.log('basic', basicCard);
+              <span class="doctor-field">Heart Pressure: ${this.pressure}</span>
+              <span class="doctor-field">BMI Index: ${this.bmiindex}</span>
+              <span class="doctor-field">Heart Diseases: ${this.heartdiseases}</span>
+              <span class="doctor-field">Age: ${this.age}</span>
+              <span class="doctor-field">Date of Visit: ${this.date}</span>
+              <span class="doctor-field">Comment: ${this.commentary}</span>
+  `
+    const basicCard = this.element;
     const showMore = basicCard.querySelector('.card-content > .content > .show-more-link');
-    console.log('show-more', showMore);
     showMore.before(fieldContainer);
-    console.log(fieldContainer);
   }
 }
 
@@ -201,6 +197,19 @@ class DentistVisit extends Visit {
     super(visitname, date, fullname, purpose, commentary);
     this.visitname = 'Dentist'
     this.lastvisit = lastvisit;
+  }
+
+  addDentistFields() {
+    const fieldContainer = document.createElement('div');
+    fieldContainer.classList.add('additional-fields', 'is-hidden');
+    fieldContainer.innerHTML = `
+                <span class="doctor-field">Last Visit Date: ${this.lastvisit}</span>
+                <span class="doctor-field">Date of Visit: ${this.date}</span>
+                <span class="doctor-field">Comment: ${this.commentary}</span>
+    `
+    const basicCard = this.element;
+    const showMore = basicCard.querySelector('.card-content > .content > .show-more-link');
+    showMore.before(fieldContainer);
   }
 }
 
