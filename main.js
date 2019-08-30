@@ -281,6 +281,9 @@ var TherapistVisit = function (_Visit3) {
 
 var loadCards = function () {
   var cards = cardStorage.getItem('cards');
+  if (cards === null) {
+    return;
+  };
   cardList = JSON.parse(cards);
   cardList.forEach(function (card) {
     return newCard(card, false);
