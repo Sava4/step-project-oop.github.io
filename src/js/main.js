@@ -244,6 +244,7 @@ class TherapistVisit extends Visit {
 
 const loadCards = (() => {
   let cards = cardStorage.getItem('cards');
+  if (cards === null) {return};
   cardList = JSON.parse(cards)
   cardList.forEach(card => newCard(card, false));
 }
