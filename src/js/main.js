@@ -1,3 +1,6 @@
+const cardStorage = window.localStorage;
+let cardList = [];
+
 const html = document.getElementsByTagName('html')[0];
 const create = document.getElementById('create-btn');
 const modal = document.getElementById('card-modal');
@@ -58,7 +61,7 @@ doctorselect.addEventListener('change', (e) => {
 
 });
 
-const newCard = (fd) => {
+const newCard = (fd, fromUser = true) => {
   let card;
   if (fd.visitname === 'Cardiologist') {
     card = new CardioVisit(fd.visitname, fd.date, fd.fullname, fd.purpose, fd.commentary, fd.pressure, fd.bmiindex, fd.heartdiseases, fd.age);
@@ -70,9 +73,12 @@ const newCard = (fd) => {
     card = new TherapistVisit(fd.visitname, fd.date, fd.fullname, fd.purpose, fd.commentary, fd.age);
     card.addTherapistFields();
   }
+  if (fromUser) {
+    cardList.push(fd);
+    cardStorage.setItem("cards", JSON.stringify(cardList));
+  }
   card.draw();
 }
-
 
 save.addEventListener('click', () => {
   Array.from(form.elements).forEach (el => el.addEventListener('invalid', (e) => e.target.classList.add('is-danger')));
@@ -147,11 +153,11 @@ class Visit {
             ]
   }
 
-
-
-   
   onClick(e) {
     if (e.target.classList.contains('delete')) {
+      let idx = Array.from(e.target.parentNode.children).indexOf(e.target);
+      cardList.splice(idx, 1);
+      cardStorage.setItem("cards", JSON.stringify(cardList));
       this.element.remove();
       } else if (e.target.classList.contains('show-more-link')) {
         e.preventDefault();
@@ -179,11 +185,11 @@ class CardioVisit extends Visit {
     const fieldContainer = document.createElement('div');
     fieldContainer.classList.add('additional-fields', 'is-hidden');
     fieldContainer.innerHTML = `
-              <span class="doctor-field">Heart Pressure: ${this.pressure}</span>
-              <span class="doctor-field">BMI Index: ${this.bmiindex}</span>
-              <span class="doctor-field">Heart Diseases: ${this.heartdiseases}</span>
-              <span class="doctor-field">Age: ${this.age}</span>
-              <span class="doctor-field">Date of Visit: ${this.date}</span>
+              <span class="doctor-field"><strong>Heart Pressure:</strong>${this.pressure}</span>
+              <span class="doctor-field"><strong>BMI Index:</strong> ${this.bmiindex}</span>
+              <span class="doctor-field"><strong>Heart Diseases:</strong> ${this.heartdiseases}</span>
+              <span class="doctor-field"><strong>Age:</strong> ${this.age}</span>
+              <span class="doctor-field"><strong>Date of Visit:</strong> ${this.date}</span>
               <span class="doctor-field">Comment: ${this.commentary}</span>
   `
     const basicCard = this.element;
@@ -203,8 +209,8 @@ class DentistVisit extends Visit {
     const fieldContainer = document.createElement('div');
     fieldContainer.classList.add('additional-fields', 'is-hidden');
     fieldContainer.innerHTML = `
-                <span class="doctor-field">Last Visit Date: ${this.lastvisit}</span>
-                <span class="doctor-field">Date of Visit: ${this.date}</span>
+                <span class="doctor-field"><strong>Last Visit Date:</strong> ${this.lastvisit}</span>
+                <span class="doctor-field"><strong>Date of Visit:</strong> ${this.date}</span>
                 <span class="doctor-field">Comment: ${this.commentary}</span>
     `
     const basicCard = this.element;
@@ -224,9 +230,9 @@ class TherapistVisit extends Visit {
     const fieldContainer = document.createElement('div');
     fieldContainer.classList.add('additional-fields', 'is-hidden');
     fieldContainer.innerHTML = `
-                <span class="doctor-field">Age: ${this.age}</span>
-                <span class="doctor-field">Date of Visit: ${this.date}</span>
-                <span class="doctor-field">Comment: ${this.commentary}</span>
+                <span class="doctor-field"><strong>Age:</strong> ${this.age}</span>
+                <span class="doctor-field"><strong>Date of Visit:</strong> ${this.date}</span>
+                <span class="doctor-field"><strong>Comment:</strong> ${this.commentary}</span>
     `
     const basicCard = this.element;
     const showMore = basicCard.querySelector('.card-content > .content > .show-more-link');
@@ -234,3 +240,11 @@ class TherapistVisit extends Visit {
   }
 }
 
+//Load cards from local storage;
+
+const loadCards = (() => {
+  let cards = cardStorage.getItem('cards');
+  cardList = JSON.parse(cards)
+  cardList.forEach(card => newCard(card, false));
+}
+)();
