@@ -181,7 +181,7 @@ var Visit = function () {
 
   Visit.prototype.onClick = function onClick(e) {
     if (e.target.classList.contains('delete')) {
-      var idx = Array.from(e.target.parentNode.children).indexOf(e.target);
+      var idx = Array.from(dashboard.children).indexOf(this.element);
       cardList.splice(idx, 1);
       cardStorage.setItem("cards", JSON.stringify(cardList));
       this.element.remove();
