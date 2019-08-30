@@ -32,10 +32,35 @@
           </header>
           <div class="card-content">
             <div class="content">
-              <span class="pacient-name"> Ihor Dzhemesiuk </span>
-              <span class="doctor-visitname"> Cardiologist</span>
-              <a href="#" class="card-header-icon" aria-label="more options">
+              <span class="pacient-name">Ihor Dzhemesiuk </span>
+              <span class="doctor-visitname">Cardiologist</span>
+              <a href="#" class="card-header-icon show-more-link" aria-label="more options">
                 Show more...</a>
+            </div>
+          </div>
+        </div>
+        <div class="card card-size">
+          <header class="card-header">
+            <p class="card-header-title">Visit details</p>
+            <span class="card-header-icon">
+              <button class="delete" aria-label="close"></button>
+            </span>
+          </header>
+          <div class="card-content">
+            <div class="content">
+              <span class="pacient-name">Ihor Dzhemesiuk </span>
+              <span class="doctor-visitname">Cardiologist</span>
+              <div class="additional-fields">
+                <span class="doctor-field">Heart Pressure: 160/80</span>
+                <span class="doctor-field">BMI Index: 1.28</span>
+                <span class="doctor-field">Heart Diseases: Listofdiseases, separated by commas</span>
+                <span class="doctor-field">Age: 35</span>
+                <span class="doctor-field">Date of Visit: 03.05.19</span>
+                <span class="doctor-field">Purpose: Text of purpose</span>
+                <span class="doctor-field">Comment: Comment text that describes the visit</span>
+              </div>
+              <a href="#" class="card-header-icon show-more-link" aria-label="more options">
+                Show Less...</a>
             </div>
           </div>
         </div> --></div>
@@ -89,7 +114,7 @@
                 <div class="field">
                     <label class="label">Comment</label>
                     <div class="control">
-                        <textarea class="textarea" name="comment" placeholder="Comment about the visit" maxlength="400"></textarea>
+                        <textarea class="textarea" name="commentary" placeholder="Comment about the visit" maxlength="400"></textarea>
                     </div>
                   </div>
               </form>

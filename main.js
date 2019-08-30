@@ -10,10 +10,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-// document.addEventListener('DOMContentLoaded', () => {
-//   console.log('Hello Bulma!');
-// });
-
+var cardStorage = window.localStorage;
+var cardList = [];
 
 var html = document.getElementsByTagName('html')[0];
 var create = document.getElementById('create-btn');
@@ -37,6 +35,9 @@ var removeFields = function removeFields() {
 var closeModal = function closeModal() {
   modal.classList.remove('is-active');
   html.classList.remove('is-clipped');
+  Array.from(form.elements).forEach(function (el) {
+    return el.classList.remove('is-danger');
+  });
   form.reset();
   removeFields();
 };
@@ -50,53 +51,58 @@ modalCloses.forEach(function (el) {
   return el.addEventListener('click', closeModal);
 });
 
-var dropdownFields = [{ 'name': 'Cardiologist',
-  'heartpressure': 'field',
-  'bmiindex': 'field',
-  'heartdiseases': 'field',
-  'age': 'field' }, { 'name': 'Dentist',
-  'lastvisit': 'date' }, { 'name': 'Therapist',
-  'age': 'field' }];
-
 doctorselect.addEventListener('change', function (e) {
   var doctor = e.target.value;
 
 
-  var obj = dropdownFields.find(function (el) {
+  var doctorFields = Visit.dropdownFields().find(function (el) {
     return doctor === el.name;
-  });
-
+  }).fields;
   removeFields();
 
-  for (var prop in obj) {
-    if (obj[prop] === 'field') {
-      var field = document.createElement('div');
-      field.classList.add('field', 'generated');
-      field.innerHTML = '<label class="label">' + prop + '</label>\n      <div class="control">\n        <input class="input" name="' + prop + '" type="text" required>\n      </div>';
+  doctorFields.forEach(function (el) {
+    var field = document.createElement('div');
+    field.classList.add('field', 'generated');
+
+    if (el.type === 'field') {
+      field.innerHTML = '<label class="label">' + el.title + '</label>\n                        <div class="control">\n                          <input class="input" name="' + el.id + '" type="text" placeholder="' + el.placeholder + '" required>\n                        </div>';
 
       injectfield.after(field);
-    } else if (obj[prop] === 'date') {
-      var _field = document.createElement('div');
-      _field.classList.add('field', 'generated');
-      _field.innerHTML = '<label class="label">' + prop + '</label>\n      <div class="control">\n        <input class="input" name="' + prop + '" type="date" required>\n      </div>';
-      injectfield.after(_field);
+    } else if (el.type === 'date') {
+      field.innerHTML = '<label class="label">' + el.title + '</label>\n                          <div class="control">\n                            <input class="input" name="' + el.id + '" type="date" required>\n                          </div>';
+      injectfield.after(field);
     }
-  }
+  });
 });
 
 var newCard = function newCard(fd) {
+  var fromUser = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
   var card = void 0;
   if (fd.visitname === 'Cardiologist') {
-    card = new CardioVisit(fd.visitname, fd.date, fd.fullname, fd.purpose, fd.commentary = "", fd.pressure, fd.bmiindex, fd.heartdiseases, fd.age);
+    card = new CardioVisit(fd.visitname, fd.date, fd.fullname, fd.purpose, fd.commentary, fd.pressure, fd.bmiindex, fd.heartdiseases, fd.age);
+    card.addCardioFields();
   } else if (fd.visitname === 'Dentist') {
-    card = new DentistVisit(fd.visitname, fd.date, fd.fullname, fd.purpose, fd.commentary = "", fd.lastvisit);
+    card = new DentistVisit(fd.visitname, fd.date, fd.fullname, fd.purpose, fd.commentary, fd.lastvisit);
+    card.addDentistFields();
   } else if (fd.visitname === 'Therapist') {
-    card = new TherapistVisit(fd.visitname, fd.date, fd.fullname, fd.purpose, fd.commentary = "", fd.age);
+    card = new TherapistVisit(fd.visitname, fd.date, fd.fullname, fd.purpose, fd.commentary, fd.age);
+    card.addTherapistFields();
+  }
+  if (fromUser) {
+    cardList.push(fd);
+    cardStorage.setItem("cards", JSON.stringify(cardList));
   }
   card.draw();
 };
 
 save.addEventListener('click', function () {
+  Array.from(form.elements).forEach(function (el) {
+    return el.addEventListener('invalid', function (e) {
+      return e.target.classList.add('is-danger');
+    });
+  });
+
   if (form.reportValidity()) {
     var formIter = new FormData(form);
     var formData = {};
@@ -144,14 +150,45 @@ var Visit = function () {
 
     this.element = document.createElement('div');
     this.element.classList.add('card', 'card-size');
-    this.element.innerHTML = '\n    <header class="card-header">\n      <p class="card-header-title">' + this.purpose + '</p>\n      <span class="card-header-icon">\n        <button class="delete" aria-label="close"></button>\n      </span>\n    </header>\n    <div class="card-content">\n      <div class="content">\n        <span class="pacient-name">' + this.fullname + '</span>\n        <span class="doctor-visitname">' + this.visitname + '</span>\n        <a href="#" class="card-header-icon" aria-label="more options">\n          Show more...</a>\n      </div>';
+    this.element.innerHTML = '\n    <header class="card-header">\n      <p class="card-header-title">' + this.purpose + '</p>\n      <span class="card-header-icon">\n        <button class="delete" aria-label="close"></button>\n      </span>\n    </header>\n    <div class="card-content">\n      <div class="content">\n        <span class="pacient-name">' + this.fullname + '</span>\n        <span class="doctor-visitname">' + this.visitname + '</span>\n        <a href="#" class="card-header-icon show-more-link" aria-label="more options">\n          Show more...</a>\n      </div>';
     this.element.onclick = this.onClick.bind(this);
     this.element.style.cursor = 'pointer';
   }
 
+  Visit.dropdownFields = function dropdownFields() {
+    return [{ 'name': 'Cardiologist',
+      'fields': [{ 'id': 'heartpressure',
+        'title': 'Heart Pressure',
+        'placeholder': '120/80',
+        'type': 'field' }, { 'id': 'bmiindex',
+        'placeholder': '1.28',
+        'title': 'Your BMI Index',
+        'type': 'field' }, { 'id': 'heartdiseases',
+        'placeholder': 'Names of diseases',
+        'title': 'Heart Diseases',
+        'type': 'field' }, { 'id': 'age',
+        'placeholder': '18',
+        'title': 'Age',
+        'type': 'field' }] }, { 'name': 'Dentist',
+      'fields': [{ 'id': 'lastvisit',
+        'title': 'Date of Last Visit',
+        'type': 'date' }] }, { 'name': 'Therapist',
+      'fields': [{ 'id': 'age',
+        'placeholder': '18',
+        'title': 'Age',
+        'type': 'field' }] }];
+  };
+
   Visit.prototype.onClick = function onClick(e) {
     if (e.target.classList.contains('delete')) {
+      var idx = Array.from(e.target.parentNode.children).indexOf(e.target);
+      cardList.splice(idx, 1);
+      cardStorage.setItem("cards", JSON.stringify(cardList));
       this.element.remove();
+    } else if (e.target.classList.contains('show-more-link')) {
+      e.preventDefault();
+      e.target.innerText === 'Show more...' ? e.target.innerText = 'Show less...' : e.target.innerText = 'Show more...';
+      e.target.previousSibling.classList.toggle('is-hidden');
     }
   };
 
@@ -178,6 +215,15 @@ var CardioVisit = function (_Visit) {
     return _this;
   }
 
+  CardioVisit.prototype.addCardioFields = function addCardioFields() {
+    var fieldContainer = document.createElement('div');
+    fieldContainer.classList.add('additional-fields', 'is-hidden');
+    fieldContainer.innerHTML = '\n              <span class="doctor-field"><strong>Heart Pressure:</strong>' + this.pressure + '</span>\n              <span class="doctor-field"><strong>BMI Index:</strong> ' + this.bmiindex + '</span>\n              <span class="doctor-field"><strong>Heart Diseases:</strong> ' + this.heartdiseases + '</span>\n              <span class="doctor-field"><strong>Age:</strong> ' + this.age + '</span>\n              <span class="doctor-field"><strong>Date of Visit:</strong> ' + this.date + '</span>\n              <span class="doctor-field">Comment: ' + this.commentary + '</span>\n  ';
+    var basicCard = this.element;
+    var showMore = basicCard.querySelector('.card-content > .content > .show-more-link');
+    showMore.before(fieldContainer);
+  };
+
   return CardioVisit;
 }(Visit);
 
@@ -193,6 +239,15 @@ var DentistVisit = function (_Visit2) {
     _this2.lastvisit = lastvisit;
     return _this2;
   }
+
+  DentistVisit.prototype.addDentistFields = function addDentistFields() {
+    var fieldContainer = document.createElement('div');
+    fieldContainer.classList.add('additional-fields', 'is-hidden');
+    fieldContainer.innerHTML = '\n                <span class="doctor-field"><strong>Last Visit Date:</strong> ' + this.lastvisit + '</span>\n                <span class="doctor-field"><strong>Date of Visit:</strong> ' + this.date + '</span>\n                <span class="doctor-field">Comment: ' + this.commentary + '</span>\n    ';
+    var basicCard = this.element;
+    var showMore = basicCard.querySelector('.card-content > .content > .show-more-link');
+    showMore.before(fieldContainer);
+  };
 
   return DentistVisit;
 }(Visit);
@@ -210,6 +265,25 @@ var TherapistVisit = function (_Visit3) {
     return _this3;
   }
 
+  TherapistVisit.prototype.addTherapistFields = function addTherapistFields() {
+    var fieldContainer = document.createElement('div');
+    fieldContainer.classList.add('additional-fields', 'is-hidden');
+    fieldContainer.innerHTML = '\n                <span class="doctor-field"><strong>Age:</strong> ' + this.age + '</span>\n                <span class="doctor-field"><strong>Date of Visit:</strong> ' + this.date + '</span>\n                <span class="doctor-field"><strong>Comment:</strong> ' + this.commentary + '</span>\n    ';
+    var basicCard = this.element;
+    var showMore = basicCard.querySelector('.card-content > .content > .show-more-link');
+    showMore.before(fieldContainer);
+  };
+
   return TherapistVisit;
 }(Visit);
+
+//Load cards from local storage;
+
+var loadCards = function () {
+  var cards = cardStorage.getItem('cards');
+  cardList = JSON.parse(cards);
+  cardList.forEach(function (card) {
+    return newCard(card, false);
+  });
+}();
 //# sourceMappingURL=main.js.map
