@@ -155,7 +155,7 @@ class Visit {
 
   onClick(e) {
     if (e.target.classList.contains('delete')) {
-      let idx = Array.from(e.target.parentNode.children).indexOf(e.target);
+      let idx = Array.from(dashboard.children).indexOf(this.element);
       cardList.splice(idx, 1);
       cardStorage.setItem("cards", JSON.stringify(cardList));
       this.element.remove();
